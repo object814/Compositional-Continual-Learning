@@ -1,2 +1,20 @@
+# --- OS / editor cruft ---
+.DS_Store
 .DS_store
-.idea
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# --- Figure sources -------------------------------------------------
+# Source PDFs and LaTeX tables the figures in static/images/ were
+# rendered from (~21 MB). The site does not load them, so they stay
+# local. Delete these two lines if you want them in the repo.
+media/
+
+# --- Scratch ---
+*.log
+__pycache__/
+node_modules/
+.cache/

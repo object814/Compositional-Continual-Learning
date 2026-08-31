@@ -2,441 +2,792 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
-        content="Generalizable Long-Horizon Manipulations with Large Language Models">
-  <title>Generalizable Long-Horizon Manipulations with Large Language Models</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+        content="Benchmarking World Models for Continual Learning on Compositional Tasks">
+  <title>Benchmarking World Models for Continual Learning on Compositional Tasks</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
 
   <link rel="stylesheet" href="./css/bulma.min.css">
-  <link rel="stylesheet" href="./css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./js/fontawesome.all.min.js"></script>
-  <script src="./js/bulma-carousel.min.js"></script>
-  <script src="./js/bulma-slider.min.js"></script>
-  <script src="./js/index.js"></script>
-  <link rel="stylesheet" href="index.css">
+
+  <!-- MathJax, for the metric definitions in Appendix A -->
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+      svg: {fontCache: 'global'}
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <style>
-  
+  .caption {
+    font-size: 0.9rem;
+    color: #4a4a4a;
+    margin-top: 0.75rem;
+    text-align: justify;
+  }
+  .figure-block {
+    margin-bottom: 1.5rem;
+  }
+  .appendix-tag {
+    display: inline-block;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #363636;
+    border-radius: 4px;
+    padding: 0.15rem 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+  .results-table {
+    font-size: 0.82rem;
+  }
+  .results-table td, .results-table th {
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .results-table td:first-child, .results-table th:first-child {
+    text-align: left;
+  }
+  .results-table .group-row td {
+    text-align: left;
+    font-style: italic;
+    background-color: #fafafa;
+  }
+  .results-table .avg-row td {
+    border-top: 2px solid #dbdbdb;
+    font-weight: 600;
+  }
+  .table-scroll {
+    overflow-x: auto;
+  }
+  .suite-table td, .suite-table th {
+    vertical-align: middle;
+  }
+  .note-box {
+    background-color: #f5f7fa;
+    border-left: 4px solid #363636;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
 </style>
 </head>
 <body>
+
+<!-- ============================ HEADER ============================ -->
 <section class="hero">
   <div class="hero-body" style="background-color: white;">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title" style="width: 1200px; color: black;">Generalizable Long-Horizon Manipulations with
-            Large Language Models</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              Haoyu Zhou<sup>1</sup>,</span>
-            <span class="author-block">
-              Mingyu Ding<sup>2</sup>,</span>
-            <span class="author-block">
-              Weikun Peng<sup>1</sup>,</span>
-            </span>
-            <span class="author-block">
-              Masayoshi Tomizuka<sup>2</sup>,</span>
-            </span>
-            <span class="author-block">
-              Lin Shao<sup>1</sup>,</span>
-            </span>
-            <span class="author-block">
-              Chuang Gan<sup>3,4</sup></span>
-            </span>
-          </div>
+          <h1 class="title is-2 publication-title" style="color: black;">
+            Benchmarking World Models for Continual Learning<br>on Compositional Tasks
+          </h1>
 
+          <!-- TODO: replace with the author list / affiliations once de-anonymised -->
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>National University of Singapore;</span>
-            <span class="author-block"><sup>2</sup>UC Berkeley, USA;</span>
-            <span class="author-block"><sup>3</sup>University of Massachusetts Amherst, USA;</span>
-            <span class="author-block"><sup>4</sup>MIT-IBM Watson AI Lab, USA</span>
+            <span class="author-block">Anonymous Authors</span>
+          </div>
+          <div class="is-size-6 publication-authors" style="color:#555;">
+            <span class="author-block">Under review</span>
           </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2310.02264"
+                <a href="./paper.pdf"
                    class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
                   <span>Paper</span>
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2310.02264"
+                <a href="#appendix-a"
                    class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=TpCIRg9XuEg&ab_channel=object814"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
+                  <span class="icon"><i class="fas fa-book"></i></span>
+                  <span>Appendix</span>
                 </a>
               </span>
             </div>
+          </div>
 
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section">
+<!-- ============================ TEASER ============================ -->
+<section class="hero teaser">
   <div class="container is-max-desktop">
-    <!-- Abstract. -->
+    <div class="hero-body">
+      <img src="./static/images/teaser_figure.png"
+           alt="Overview of the compositional continual learning benchmark for world models."/>
+      <p class="caption">
+        <strong>Overview of our compositional continual learning benchmark for world models in robot
+        manipulation.</strong> <em>Left</em>: each task suite presents primitive manipulation tasks in
+        sequence and ends with a composition task built only from primitives already seen.
+        <em>Middle</em>: world models conditioned on both inputs learn the sequence under continual
+        learning settings. <em>Right</em>: we measure how much earlier tasks are forgotten and how fast
+        the final composition task is learnt through reusing.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ABSTRACT ============================ -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            This work introduces a framework harnessing the capabilities of Large Language Models (LLMs) to generate primitive task conditions for 
-            generalizable long-horizon manipulations with novel objects and unseen tasks. These task conditions serve as guides for the 
-            generation and adjustment of Dynamic Movement Primitives (DMP) trajectories for longhorizon task execution. We further create a challenging robotic manipulation task suite 
-            based on Pybullet for long-horizon task evaluation. 
-            Extensive experiments in both simulated and realworld environments demonstrate the effectiveness of our framework on both familiar tasks involving new objects and novel but related tasks,
-            highlighting the potential of LLMs in enhancing robotic system versatility and adaptability 
+            A desirable property of a world model is the ability to learn continually across tasks,
+            adapting to new environments without forgetting what it has already learnt. In particular,
+            the ability to retain and reuse knowledge obtained from prior experiences underpins an
+            agent's ability to efficiently adapt to novel environments, as the dynamics of the physical
+            world can often be described in reoccurring mechanisms. Their measure of adaptation, however,
+            entangles two abilities: the speed and capacity to learn unseen tasks, and the reuse of
+            knowledge already acquired, because incoming tasks always carry novel content alongside what
+            recurs. In order to isolate knowledge reuse from prior experiences, we propose a compositional
+            continual learning benchmark for world models in robot manipulation. Specifically, we design
+            each task curriculum to end with a <em>compositional</em> task built by recombining all
+            primitives that precede it in the sequence. We further factorise this composition along the
+            axes of action and perception to better understand how different input modalities bottleneck
+            knowledge reuse. We evaluate state-of-the-art world models under canonical continual learning
+            methods, alongside a modular world model whose dynamics backbone contains explicitly reusable
+            components. Results show that modularity balances reuse against forgetting better than
+            conventional methods, but none solve the problem fully, leaving clear room for continual world
+            models built to reuse without forgetting.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
+  </div>
 </section>
 
-<section class="section">
+<!-- ============================ BENCHMARK ============================ -->
+<section class="section" style="padding-top: 0;">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Framework Structure</h2>
-          <div class="content has-text-justified">
-            <p>
-              We leverage LLMs to generate and generalize primitive task conditions for both familiar tasks with novel objects and novel but related tasks. 
-              Subsequently, the highlevel task conditions guide the generation and adjustment of lowlevel trajectories originally learned from demonstrations for longhorizon task execution. 
-            </p>
-          </div>
-          <div class="columns is-vcentered">
-            <div class="column is-three-fifths has-text-centered">
-              <video controls autoplay muted loop>  
-                <source src="compressed/1.mp4" type="video/mp4">  
-              </video>
-            </div>
-            <div class="column is-two-fifths has-text-centered">
-              <img src="compressed/2.png"/>
-            </div>
-          </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-three-fifths ">
-          <h2 class="title is-3">Task condition generation and generalization experiment</h2>
-          <p class="has-text-justified">
-            We evaluate the ability of our framework to generate and generalize task conditions on all 10 primitive tasks. 
-            The LLM (GPT-3.5) is provided with condition examples. Comparison is made with task conditions generated from environments (methods explained in paper). 
-            A successfully generated task condition should contain accurate and enough information to guide the execution of the primitive task.
-          </p>
-        </div>
-        <div class="column is-two-fifths has-text-centered">
-          <img src="compressed/3.png"/>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-three-fifths">
-          <h2 class="title is-3">Simulation experiment</h2>
-          <p class="has-text-justified">
-            To evaluate our framework's ability to execute long-horizon tasks using DMP trajectories generated and adjuested by task conditions, we design a challenging Robotic Manipulation Task Suite in Pybullet. 
-          </p>
-          <p class="has-text-justified">
-            The environment consists of two 7 Dof robots Franka and Kinova with a kitchen scene including various interactive objects. 
-            It contains 10 diverse primitive tasks (37 if considering different objects) and 4 long-horizon tasks in simulation. 
-          </p>
-        </div>
-        <div class="column is-two-fifths has-text-centered">
-          <img src="compressed/4.png"/>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br><br>
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-half has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/5.mp4" type="video/mp4">  
-          </video>
-          <p class="has-text-centered">
-            Demonstration: Put the bowl into the bottom drawer
-          </p>
-        </div>
-        <div class="column is-half has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/6.mp4" type="video/mp4">  
-          </video>
-          <p class="has-text-centered">
-            Generation and execution: Put the bowl into the upper drawer
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br><br><br>
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-half has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/7.mp4" type="video/mp4">  
-          </video>
-          <p class="has-text-centered">
-            Demonstration: Put the bottle into the box
-          </p>
-        </div>
-        <div class="column is-half has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/8.mp4" type="video/mp4">  
-          </video>
-          <p class="has-text-centered">
-            Generation and execution: Put the bowl into the box
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br><br><br>
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/9.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Move the bottle into the box w/o task condition <br><br></h3>
-          <p class="has-text-centered">
-            The move into primitive task is failed because initial goal position obtained from environment pointcloud is deviated. 
-            And a collision between bottle and box happened.
-          </p>
-        </div>
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/10.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Move the bottle into the box w/ task condition adjusting trajectory</h3>
-          <p class="has-text-centered">
-            As the collision between bottle and box is against task condition collision, 
-            the manipulator backwards a few steps and adjust goal position to generate a new DMP trajectory, 
-            eventually complete the task.
-          </p>
-        </div>
-        <div class="column is-5">
-          <h3 class="title is-6">Task condition by LLM </h3>
+        <h2 class="title is-3">The Benchmark</h2>
+        <div class="content has-text-justified">
           <p>
-            <strong>Task name:</strong> move bottle into box<br>
-            <strong>Relevant objects:</strong><br>
-            bottle, box, gripper<br>
-            <strong>Pre-conditions:</strong><br>
-            gripper grasping bottle<br>
-            box open<br>
-            <strong>Post-conditions:</strong><br>
-            gripper grasping bottle<br>
-            bottle inside box<br>
-            box open<br>
-            <strong>Collisions:</strong><br>
-            gripper and bottle
+            At each step, a world model takes two inputs: an <em>action</em> given to it for the current
+            step, and current <em>perception</em>, which in our case consists of image observations and
+            proprioception. The dynamics it must learn are therefore conditioned on both. This view
+            motivates the central design choice of our task suites: we compose primitive skills along
+            these two input modalities, yielding three suite types.
           </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <br><br>
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/11.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Grasp the bottle w/o task condition <br><br></h3>
-          <p class="has-text-centered">
-            The move into primitive task is failed because initial goal position obtained from environment pointcloud is deviated. 
-            And a collision between bottle and box happened.
-          </p>
-        </div>
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/12.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Grasp the bottle w/  task condition <br> generating trajectory</h3>
-          <p class="has-text-centered">
-            As the collision between bottle and box is against task condition collision, 
-            the manipulator backwards a few steps and adjust goal position to generate a new DMP trajectory, 
-            eventually complete the task.
-          </p>
-        </div>
-        <div class="column is-5">
-          <h3 class="title is-6">Task condition by LLM </h3>
+          <ul>
+            <li><strong>Action-composition.</strong> The perception context is held fixed. The scene and
+              objects stay consistent while the final composition task combines action primitives learnt
+              through the curriculum. This isolates whether the model reuses across the action space
+              under a familiar perception input.</li>
+            <li><strong>Perception-composition.</strong> The action patterns are held approximately fixed.
+              Same manipulation is performed on objects with different visual appearances, and the
+              composition task operates on an unseen combination of them. This isolates whether the model
+              reuses across the perception space under a familiar action distribution.</li>
+            <li><strong>Full composition.</strong> Both axes change simultaneously. The primitive tasks
+              differ in both action pattern and perception context, and the composition task combines
+              both.</li>
+          </ul>
           <p>
-            <strong>Task name:</strong> grasp bottle<br>
-            <strong>Relevant objects:</strong><br>
-            bottle, gripper<br>
-            <strong>Pre-conditions:</strong><br>
-            gripper not grasping<br>
-            <strong>Post-conditions:</strong><br>
-            gripper grasping bottle<br>
-            <strong>Collisions:</strong><br>
-            gripper and bottle
+            We build our benchmark on top of Meta-World, whose 50 monolithic tasks provide the assets and
+            environment we work with, and construct six composition task suites in total.
           </p>
         </div>
+
+        <div class="table-scroll">
+          <table class="table is-fullwidth is-narrow suite-table">
+            <thead>
+              <tr>
+                <th>Suite</th>
+                <th>Primitive task curriculum</th>
+                <th>Composition task</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group-row"><td colspan="3"><em>Action composition</em></td></tr>
+              <tr>
+                <td>Reach</td>
+                <td>reach in $xy$ &rarr; reach in $xz$ &rarr; reach in $yz$</td>
+                <td>reach in $xyz$</td>
+              </tr>
+              <tr>
+                <td>Grasp</td>
+                <td>pick cube &rarr; place cube</td>
+                <td>pick and place cube</td>
+              </tr>
+              <tr class="group-row"><td colspan="3"><em>Perception composition</em></td></tr>
+              <tr>
+                <td>BinPnP</td>
+                <td>pick cube from yellow bin to purple bin &rarr; yellow to red &rarr; blue to purple</td>
+                <td>blue bin to red bin</td>
+              </tr>
+              <tr>
+                <td>PnPBlock</td>
+                <td>pick and place red block &rarr; pick and place blue block</td>
+                <td>stack the two blocks</td>
+              </tr>
+              <tr class="group-row"><td colspan="3"><em>Full composition</em></td></tr>
+              <tr>
+                <td>DrawerPnP</td>
+                <td>pick and place cube &rarr; open drawer</td>
+                <td>open drawer then pick and place cube inside</td>
+              </tr>
+              <tr>
+                <td>PnPBoxClose</td>
+                <td>pick and place cube &rarr; close box</td>
+                <td>pick and place cube inside box then close it</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">
+          <strong>The six composition task suites.</strong> Primitives are trained in the listed order,
+          and each suite ends with a composition task built only from the primitives preceding it.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section">
+<!-- ============================ MODEL SEPARATION ============================ -->
+<section class="section" style="padding-top: 0;">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Real-world experiment</h2>
-          <div class="content has-text-justified">
-            <p>
-              To demonstrate the practicality of our to perform longhorizon tasks in real scenarios, we set up a real-world long-horizon task, 
-              featuring a dual-arm MOVO robot which has two 7 DoF manipulators and a Kinect RGB-D camera overhead. 
-              We use Segment Anything to obtain segmented point clouds of the surroundings and objects. 
-              Position control is performed as we use rangeIK for solving inverse kinematics.
-            </p>
-          </div>
-          <div class="columns is-vcentered">
-            <div class="column is-three-fifths">
-              <video controls autoplay muted loop>  
-                <source src="compressed/13.mp4" type="video/mp4">  
-              </video>
-            </div>
-            <div class="column is-two-fifths">
+        <h2 class="title is-3">Separating World Models for Continual Learning</h2>
+        <div class="columns is-vcentered">
+          <div class="column is-three-fifths">
+            <div class="content has-text-justified">
               <p>
-                ■&nbsp;&nbsp;grasp the bottle;<br>
-                ■&nbsp;&nbsp;open the microwave;<br>
-                ■&nbsp;&nbsp;move the bottle in front of the microwave;<br>
-                ■&nbsp;&nbsp;move the bottle into the microwave:<br>
-                ■&nbsp;&nbsp;release the bottle;<br>
-                ■&nbsp;&nbsp;move out of the microwave;<br>
-                ■&nbsp;&nbsp;close the microwave.<br>
+                A world model naturally partitions into two groups by semantic role. The
+                <em>task-agnostic</em> components capture how the world evolves and how observations are
+                generated, and should be independent of any specific task. The <em>task-specific</em>
+                components consume the latent representation produced by the task-agnostic components to
+                decide what the robot should do, and depend entirely on the task definition.
+              </p>
+              <p>
+                This partition is consequential for how we apply continual learning. When a new task
+                arrives, the novel observations and interactions must be absorbed by the task-agnostic
+                backbone continually. The task-specific heads are private to each task and are simply
+                re-initialised when the curriculum advances, because very different tasks can be defined
+                under the same environment and dynamics, each with its own reward and optimal behaviour.
               </p>
             </div>
           </div>
-      </div>
-    </div>
-  </div>
+          <div class="column is-two-fifths has-text-centered">
+            <img src="./static/images/model_separation.png"
+                 alt="World model separation for continual learning."/>
+          </div>
+        </div>
+        <p class="caption">
+          <strong>World model separation for continual learning.</strong> The <em>task-agnostic</em> part
+          (left: encoder, dynamics, and decoder if present) captures how the world evolves and is the only
+          part learnt continually across the curriculum. The <em>task-specific</em> heads (right: reward,
+          actor, critic) consume its latent and are re-initialised for each new task.
+        </p>
 
-  <br><br><br>
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/14.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Move the bottle into the microwave w/o task condition <br><br></h3>
-        </div>
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/15.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Move the bottle into the microwave w/ task condition adjusting trajectory</h3>
-        </div>
-        <div class="column is-5">
-          <h3 class="title is-6">Task condition by LLM </h3>
+        <div class="content has-text-justified">
           <p>
-            <strong>Task name:</strong> move bottle into microwave<br>
-            <strong>Relevant objects:</strong><br>
-            bottle, microwave, gripper<br>
-            <strong>Pre-conditions:</strong><br>
-            gripper grasping bottle<br>
-            microwave open<br>
-            <strong>Post-conditions:</strong><br>
-            gripper grasping bottle<br>
-            bottle inside microwave<br>
-            microwave open<br>
-            <strong>Collisions:</strong><br>
-            gripper and bottle
+            We evaluate three world-model families under the model-based reinforcement learning view:
+            <strong>DreamerV3</strong> and <strong>TD-MPC2</strong> as monolithic baselines, and
+            <strong>Prismatic World Model (PWM)</strong> as our modular baseline. On the monolithic
+            backbones we apply four continual learning paradigms to the task-agnostic part: naive
+            fine-tuning (<strong>FT</strong>), experience replay (<strong>ER</strong>), elastic weight
+            consolidation (<strong>EWC</strong>), and <strong>PackNet</strong>. For PWM we build a
+            continual variant that adds $K = 3$ new dynamics experts per task while freezing the experts
+            of previous tasks, so the router can reuse previously learnt dynamics while still introducing
+            new capacity. To isolate what the modular design contributes from encoder drift, we also
+            pretrain the PWM encoder with an autoencoder reconstruction objective on expert
+            demonstrations, freeze it, and give the exact same encoder checkpoint to monolithic TD-MPC2
+            for comparison.
           </p>
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  <br><br>
+<!-- ============================ RESULTS ============================ -->
+<section class="section" style="padding-top: 0;">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
-      <div class="columns is-full-width">
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/16.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Grasp the bottle w/o task condition <br><br></h3>
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results</h2>
+        <div class="figure-block has-text-centered">
+          <img src="./static/images/results_bars.png"
+               alt="Continual learning performance on all six task suites."/>
         </div>
-        <div class="column is-two-fifths has-text-centered">
-          <video controls autoplay muted loop>  
-            <source src="compressed/17.mp4" type="video/mp4">  
-          </video>
-          <h3 class="title is-6">Grasp the bottle w/  task condition <br> generating trajectory</h3>
-        </div>
-        <div class="column is-5">
-          <h3 class="title is-6">Task condition by LLM </h3>
+        <p class="caption">
+          <strong>Continual learning performance on all six task suites.</strong> Task suites are shaded
+          by composition type. BWT is lower-is-better and FWT higher-is-better, black outlines mark the
+          best method within a backbone. <em>Left</em>: the monolithic backbones DreamerV3 (blue) and
+          TD-MPC2 (orange) under four continual learning methods. <em>Right</em>: modular PWM (teal)
+          against monolithic TD-MPC2 (orange), with a scratch or a pretrained frozen encoder. Bars show
+          the mean over three random seeds with minimum and maximum scores indicated.
+        </p>
+
+        <div class="content has-text-justified" style="margin-top: 1.5rem;">
           <p>
-            <strong>Task name:</strong> right grasp bottle<br>
-            <strong>Relevant objects:</strong><br>
-            bottle, right gripper<br>
-            <strong>Pre-conditions:</strong><br>
-            right gripper not grasping<br>
-            <strong>Post-conditions:</strong><br>
-            right gripper grasping bottle<br>
-            <strong>Collisions:</strong><br>
-            right gripper and bottle
+            <strong>DreamerV3 outperforms TD-MPC2.</strong> Under naive fine-tuning and all three
+            conventional continual learning methods, DreamerV3 consistently outperforms TD-MPC2 on both
+            BWT and FWT. We attribute this to DreamerV3's generative reconstruction objective, which
+            encourages its latent to encode the scene more broadly than the current task alone requires.
+            TD-MPC2 is decoder-free by design and shapes its latent only through latent consistency,
+            reward prediction and temporal-difference learning, none of which requires the representation
+            to retain scene detail the current task does not use.
+          </p>
+          <p>
+            <strong>Difficulty rises along the composition axis.</strong> Backward transfer follows the
+            ordering of the three composition types on both backbones, 5.94 to 11.79 to 30.12 on
+            DreamerV3 and 32.15 to 57.81 to 68.68 on TD-MPC2. Forward transfer separates the two at the
+            perception axis, where DreamerV3 holds at 24.52 and TD-MPC2 drops to &minus;1.88. Recombining
+            actions under a familiar scene is the simplest case since the visual representations move
+            little. A shift in perception challenges the visual encoder and the dynamics backbone at once,
+            and only DreamerV3 absorbs it. Full composition compounds both.
+          </p>
+
+          <div class="table-scroll">
+            <table class="table is-narrow results-table" style="margin: 0 auto;">
+              <thead>
+                <tr>
+                  <th rowspan="2">Backbone</th>
+                  <th colspan="2">Action</th>
+                  <th colspan="2">Perception</th>
+                  <th colspan="2">Full</th>
+                </tr>
+                <tr>
+                  <th>BWT&darr;</th><th>FWT&uarr;</th>
+                  <th>BWT&darr;</th><th>FWT&uarr;</th>
+                  <th>BWT&darr;</th><th>FWT&uarr;</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>DreamerV3</td>
+                  <td><strong>5.94</strong></td><td>21.56</td>
+                  <td>11.79</td><td><strong>24.52</strong></td>
+                  <td>30.12</td><td>15.54</td>
+                </tr>
+                <tr>
+                  <td>TD-MPC2</td>
+                  <td><strong>32.15</strong></td><td><strong>16.76</strong></td>
+                  <td>57.81</td><td>&minus;1.88</td>
+                  <td>68.68</td><td>1.54</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="caption">
+            <strong>Performance by composition axis.</strong> BWT&darr; and FWT&uarr; grouped by
+            composition type, each averaged over all four continual learning methods and both task suites
+            of that modality.
+          </p>
+
+          <p style="margin-top: 1.5rem;">
+            <strong>Conventional methods trade forward transfer against backward transfer.</strong> No
+            conventional method achieves both, each sits at a different point along the same trade-off.
+            <em>Fine-tuning</em> is second only to ER in forward transfer, but with no forgetting
+            prevention the parameters it reads are the ones it writes, giving the worst backward transfer.
+            <em>ER</em> preserves what fine-tuning reuses and gives the best forward transfer of all, at
+            roughly half fine-tuning's forgetting; the drift is only slowed rather than stopped, and the
+            buffer grows unbounded. <em>EWC</em> can neither move the protected parameters to recombine
+            them nor fall back on free capacity to reuse them from the outside, making it the weakest
+            method here. <em>PackNet</em> comes closest because freezing is paired with a pathway for
+            reusing: it drives forgetting near zero while retaining competitive forward transfer, but
+            model capacity shrinks along the sequence and pruning allocates a fixed fraction per task,
+            making it the only method that bounds the curriculum length in advance.
+          </p>
+          <p>
+            <strong>Explicit modularity pushes the frontier further.</strong> PWM preserves reusable
+            components and enables reuse of them through an explicit architectural structure on the
+            dynamics model. Under our frozen encoder diagnostic, PWM reaches BWT 3.85 and FWT 36.18
+            against TD-MPC2's 34.97 and 38.11, nearly eliminating forgetting while matching how fast
+            TD-MPC2 learns the composition task under fine-tuning. Unlike PackNet, this combining capacity
+            is added with each task rather than carved from a shrinking pool, making it more scalable.
+            However, without the privileged frozen encoder, PWM loses both the ability to retain or reuse.
+            Furthermore, what PWM buys is the retention axis while leaving reuse where the monolithic
+            model already had it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ APPENDIX A ============================ -->
+<section class="section" id="appendix-a" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <span class="appendix-tag">Appendix A</span>
+        <h2 class="title is-3">Metric Definitions</h2>
+
+        <div class="figure-block has-text-centered">
+          <img src="./static/images/metrics_illustration.png"
+               alt="The two metrics on a representative run."/>
+        </div>
+        <p class="caption">
+          <strong>The two metrics on a representative run.</strong> Solid traces show each task while it
+          is being trained, dashed traces show the evaluation afterwards, and the dotted grey trace shows
+          the final composition task learnt from scratch. Each shaded region is the numerator of one
+          metric. <em>Backward transfer</em>: for every earlier task, the region between its
+          end-of-training level $C_i$ and its later evaluation curve, which we express as a fraction of
+          the rectangle of width $b_N - b_i$ and height $C_i - f$ that encloses it. <em>Forward
+          transfer</em>: on the final task only, the region between the sequential curve and the scratch
+          curve, positive where the curriculum helps and negative where it hurts.
+        </p>
+
+        <div class="content has-text-justified">
+          <p>
+            Let a curriculum contain $N$ tasks trained sequentially, and let $b_i$ be the global step at
+            which training of task $i$ ends. Let $R_i(s)$ be the expert-normalised return of task $i$ at
+            step $s$, where $f = 0$ is the failure floor and $100$ is a privileged, state-based scripted
+            oracle policy reference. Scores are not capped above, so a model that outperforms the
+            reference policy takes values above 100. Define $C_i = R_i(b_i)$ as the task's performance
+            when its own training ends. Evaluation is run at a fixed checkpoint interval, so each integral
+            is computed by the trapezoidal rule over those checkpoints, and all curves are averaged over
+            three random seeds before a metric is applied.
+          </p>
+
+          <p>
+            <strong>Backward transfer.</strong> For every non-final task, we take the shaded region
+            between $C_i$ and the task's evaluation curve, and express it as a fraction of the rectangle
+            enclosing it:
+          </p>
+          <p style="text-align: center;">
+            $$ D_i = \frac{\displaystyle\int_{b_i}^{b_N} \max\!\left(0,\, C_i - R_i(s)\right) \mathrm{d}s}
+            {\left(b_N - b_i\right)\left(C_i - f\right)} \times 100. $$
+          </p>
+          <p>
+            The clipping at 0 means later gains do not offset earlier losses, so $D_i$ lies in
+            $[0, 100]$: 0 if the curve never drops after training, 100 if it collapses to the floor
+            immediately and stays there. The normalisation requires $C_i > f$, which means a task must end
+            with non-zero performance. If a task is never learnt, it holds nothing that could be forgotten
+            and backward transfer calculation is excluded. Averaging over the tasks that were learnt
+            yields the backward transfer score for this task suite, lower is better:
+          </p>
+          <p style="text-align: center;">
+            $$ \mathcal{I} = \left\{\, i &lt; N : C_i &gt; f \,\right\}, \qquad
+            \mathrm{BWT} = \frac{1}{|\mathcal{I}|} \sum_{i \in \mathcal{I}} D_i. $$
+          </p>
+          <p>
+            Note that our BWT is a forgetting score in $[0, 100]$, and so is not the same quantity as the
+            backward transfer introduced in Lopez-Paz and Ranzato (2017), which subtracts a task's
+            original performance from its final performance and is higher-is-better. Theirs compares two
+            data points; ours integrates over the whole remaining curriculum.
+          </p>
+
+          <p>
+            <strong>Forward transfer.</strong> Forward transfer is measured only on the final composition
+            task to examine the reusing ability of the models. Let $R_N^{\mathrm{seq}}(t)$ be its learning
+            curve during its position in the curriculum, rebased to $t = 0$, and let
+            $R_N^{\mathrm{scr}}(t)$ be the curve obtained when learning the same task from scratch with no
+            preceding primitives. With a shared learning step $T$, FWT is the shaded region between them
+            divided by the learning length:
+          </p>
+          <p style="text-align: center;">
+            $$ \mathrm{FWT} = \frac{1}{T} \int_{0}^{T}
+            \left( R_N^{\mathrm{seq}}(t) - R_N^{\mathrm{scr}}(t) \right) \mathrm{d}t. $$
+          </p>
+          <p>
+            This is higher-is-better. Because the curves are compared over the whole budget rather than at
+            a fixed threshold, FWT rewards learning the composition task faster and learning it better.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ APPENDIX B ============================ -->
+<section class="section" id="appendix-b" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <span class="appendix-tag">Appendix B</span>
+        <h2 class="title is-3">Complete Numerical Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            The tables below give the per-suite values underlying the aggregate discussion above. Suites
+            are listed in the order of the task suite table, grouped by composition type.
+          </p>
+        </div>
+
+        <div class="table-scroll">
+          <table class="table is-narrow is-fullwidth results-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Suite</th>
+                <th colspan="2">FT</th>
+                <th colspan="2">ER</th>
+                <th colspan="2">EWC</th>
+                <th colspan="2">PackNet</th>
+              </tr>
+              <tr>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group-row"><td colspan="9"><em>DreamerV3</em></td></tr>
+              <tr>
+                <td>Reach</td>
+                <td><u>11.77</u></td><td><u>43.91</u></td>
+                <td><u>5.68</u></td><td><u><strong>49.42</strong></u></td>
+                <td><u>7.22</u></td><td>&minus;2.25</td>
+                <td><u><strong>0.67</strong></u></td><td><u>36.95</u></td>
+              </tr>
+              <tr>
+                <td>Grasp</td>
+                <td><u>10.07</u></td><td>21.28</td>
+                <td><u>5.07</u></td><td><u><strong>26.71</strong></u></td>
+                <td><u>4.62</u></td><td>&minus;20.26</td>
+                <td><u><strong>2.43</strong></u></td><td>16.71</td>
+              </tr>
+              <tr>
+                <td>BinPnP</td>
+                <td><u>29.27</u></td><td><u>42.09</u></td>
+                <td><u>6.46</u></td><td><u><strong>49.26</strong></u></td>
+                <td><u>8.36</u></td><td>0.90</td>
+                <td><u><strong>1.57</strong></u></td><td><u>38.00</u></td>
+              </tr>
+              <tr>
+                <td>PnPBlock</td>
+                <td><u>31.80</u></td><td><u>11.64</u></td>
+                <td><u>11.80</u></td><td><u><strong>36.37</strong></u></td>
+                <td><u>4.36</u></td><td><u>8.74</u></td>
+                <td><u><strong>0.71</strong></u></td><td><u>9.20</u></td>
+              </tr>
+              <tr>
+                <td>DrawerPnP</td>
+                <td><u>56.15</u></td><td><u>7.06</u></td>
+                <td><u>21.90</u></td><td><u><strong>35.52</strong></u></td>
+                <td><u>13.92</u></td><td><u>&minus;1.65</u></td>
+                <td><u><strong>0.20</strong></u></td><td><u>13.45</u></td>
+              </tr>
+              <tr>
+                <td>PnPBoxClose</td>
+                <td><u>65.75</u></td><td><u><strong>31.12</strong></u></td>
+                <td><u>43.22</u></td><td><u>3.99</u></td>
+                <td><u>39.20</u></td><td><u>6.01</u></td>
+                <td><u><strong>0.63</strong></u></td><td><u>28.86</u></td>
+              </tr>
+              <tr class="avg-row">
+                <td>Average</td>
+                <td><u>34.14</u></td><td><u>26.18</u></td>
+                <td><u>15.69</u></td><td><u><strong>33.55</strong></u></td>
+                <td><u>12.95</u></td><td><u>&minus;1.42</u></td>
+                <td><u><strong>1.04</strong></u></td><td><u>23.86</u></td>
+              </tr>
+
+              <tr class="group-row"><td colspan="9"><em>TD-MPC2</em></td></tr>
+              <tr>
+                <td>Reach</td>
+                <td>38.14</td><td>10.47</td>
+                <td>25.38</td><td>12.07</td>
+                <td>23.09</td><td><u>10.35</u></td>
+                <td><strong>0.77</strong></td><td><strong>12.94</strong></td>
+              </tr>
+              <tr>
+                <td>Grasp</td>
+                <td>62.62</td><td><u><strong>27.17</strong></u></td>
+                <td>46.70</td><td>24.74</td>
+                <td>51.54</td><td><u>17.27</u></td>
+                <td><strong>8.98</strong></td><td><u>19.04</u></td>
+              </tr>
+              <tr>
+                <td>BinPnP</td>
+                <td>77.16</td><td>10.50</td>
+                <td>44.61</td><td><strong>19.69</strong></td>
+                <td>64.46</td><td><u>5.18</u></td>
+                <td><strong>3.84</strong></td><td>9.73</td>
+              </tr>
+              <tr>
+                <td>PnPBlock</td>
+                <td>94.89</td><td><strong>2.51</strong></td>
+                <td>82.79</td><td>2.39</td>
+                <td>90.20</td><td>&minus;54.28</td>
+                <td><strong>4.56</strong></td><td>&minus;10.73</td>
+              </tr>
+              <tr>
+                <td>DrawerPnP</td>
+                <td>89.59</td><td>1.07</td>
+                <td>88.51</td><td><strong>1.81</strong></td>
+                <td>91.65</td><td>&minus;3.53</td>
+                <td><strong>4.10</strong></td><td>&minus;0.17</td>
+              </tr>
+              <tr>
+                <td>PnPBoxClose</td>
+                <td>93.07</td><td>&minus;6.27</td>
+                <td>85.48</td><td>3.19</td>
+                <td>90.16</td><td>3.21</td>
+                <td><strong>6.90</strong></td><td><strong>13.04</strong></td>
+              </tr>
+              <tr class="avg-row">
+                <td>Average</td>
+                <td>75.91</td><td>7.57</td>
+                <td>62.25</td><td><strong>10.65</strong></td>
+                <td>68.52</td><td>&minus;3.63</td>
+                <td><strong>4.86</strong></td><td>7.31</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">
+          <strong>Continual learning performance of monolithic world models.</strong>
+          <u>Underline</u> marks the better backbone (DreamerV3 or TD-MPC2) for that method and suite.
+          <strong>Bold</strong> marks the best method within a backbone. Values are means over three
+          random seeds.
+        </p>
+
+        <div class="table-scroll" style="margin-top: 2.5rem;">
+          <table class="table is-narrow is-fullwidth results-table">
+            <thead>
+              <tr>
+                <th rowspan="3">Suite</th>
+                <th colspan="4">Scratch encoder</th>
+                <th colspan="4">Pretrained frozen encoder</th>
+              </tr>
+              <tr>
+                <th colspan="2">PWM</th>
+                <th colspan="2">TD-MPC2</th>
+                <th colspan="2">PWM</th>
+                <th colspan="2">TD-MPC2</th>
+              </tr>
+              <tr>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+                <th>BWT&darr;</th><th>FWT&uarr;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Reach</td>
+                <td>44.45</td><td>9.35</td>
+                <td><strong>38.14</strong></td><td><strong>10.47</strong></td>
+                <td><strong>2.47</strong></td><td>5.84</td>
+                <td>35.07</td><td><strong>10.64</strong></td>
+              </tr>
+              <tr>
+                <td>Grasp</td>
+                <td>90.73</td><td>14.49</td>
+                <td><strong>62.62</strong></td><td><strong>27.17</strong></td>
+                <td><strong>5.69</strong></td><td>48.29</td>
+                <td>13.80</td><td><strong>49.44</strong></td>
+              </tr>
+              <tr>
+                <td>BinPnP</td>
+                <td><strong>66.97</strong></td><td>1.88</td>
+                <td>77.16</td><td><strong>10.50</strong></td>
+                <td><strong>6.65</strong></td><td>34.30</td>
+                <td>10.27</td><td><strong>37.50</strong></td>
+              </tr>
+              <tr>
+                <td>PnPBlock</td>
+                <td><strong>92.36</strong></td><td>&minus;3.21</td>
+                <td>94.89</td><td><strong>2.51</strong></td>
+                <td><strong>3.99</strong></td><td>50.02</td>
+                <td>45.36</td><td><strong>58.38</strong></td>
+              </tr>
+              <tr>
+                <td>DrawerPnP</td>
+                <td>90.81</td><td><strong>2.01</strong></td>
+                <td><strong>89.59</strong></td><td>1.07</td>
+                <td><strong>1.64</strong></td><td><strong>41.02</strong></td>
+                <td>59.06</td><td>40.22</td>
+              </tr>
+              <tr>
+                <td>PnPBoxClose</td>
+                <td><strong>89.95</strong></td><td>&minus;10.09</td>
+                <td>93.07</td><td><strong>&minus;6.27</strong></td>
+                <td><strong>2.68</strong></td><td><strong>37.62</strong></td>
+                <td>46.24</td><td>32.51</td>
+              </tr>
+              <tr class="avg-row">
+                <td>Average</td>
+                <td>79.21</td><td>2.41</td>
+                <td><strong>75.91</strong></td><td><strong>7.57</strong></td>
+                <td><strong>3.85</strong></td><td>36.18</td>
+                <td>34.97</td><td><strong>38.11</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">
+          <strong>Modular PWM against monolithic TD-MPC2.</strong> <strong>Bold</strong> marks the better
+          backbone (PWM or TD-MPC2) for that suite under the same encoder choice. Values are means over
+          three random seeds.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ APPENDIX C ============================ -->
+<section class="section" id="appendix-c" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <span class="appendix-tag">Appendix C</span>
+        <h2 class="title is-3">Complete Learning Curves</h2>
+        <div class="content has-text-justified">
+          <p>
+            The figures below give the learning curves for every suite and method. Solid coloured traces
+            show sequential training, dashed traces show task evaluation after each switch, and grey shows
+            final-task evaluation from scratch. Shading with different colours corresponds to the FWT and
+            BWT regions defined in Appendix A. Vertical dotted lines mark task switches. The training
+            budget per task is set by the steps a from-scratch run needs to converge, and therefore differs
+            across backbones. Both metrics are normalised over the interval they integrate, so scores
+            remain comparable across these budgets.
+          </p>
+        </div>
+
+        <div class="figure-block has-text-centered">
+          <img src="./static/images/full_curves_dreamerv3.png"
+               alt="Complete DreamerV3 learning curves."/>
+          <p class="caption">
+            Complete <strong>DreamerV3</strong> learning curves across six task suites and four
+            continual-learning methods.
+          </p>
+        </div>
+
+        <div class="figure-block has-text-centered">
+          <img src="./static/images/full_curves_tdmpc2.png"
+               alt="Complete TD-MPC2 learning curves."/>
+          <p class="caption">
+            Complete <strong>TD-MPC2</strong> learning curves across six task suites and four
+            continual-learning methods.
+          </p>
+        </div>
+
+        <div class="figure-block has-text-centered">
+          <img src="./static/images/full_curves_pwm.png"
+               alt="The frozen-encoder comparison across all six task suites."/>
+          <p class="caption">
+            The <strong>frozen-encoder comparison</strong> across all six task suites: PWM with a scratch
+            encoder, PWM with the pretrained frozen encoder, and monolithic TD-MPC2 with the same
+            pretrained frozen encoder. The middle and right panels differ only in whether the dynamics
+            model is explicitly modular, and are the pair our frozen-encoder diagnostic compares. TD-MPC2
+            with a scratch encoder can be found in the first column of the TD-MPC2 figure above.
           </p>
         </div>
       </div>
@@ -446,9 +797,16 @@
 
 <footer class="footer">
   <div class="container">
-    <p>
-      ICRA2025 submittion: Generalizable Long-Horizon Manipulations with Large Language Models 
-    </p>
+    <div class="content has-text-centered">
+      <p>
+        Benchmarking World Models for Continual Learning on Compositional Tasks &mdash;
+        this page hosts the appendix material accompanying the paper.
+      </p>
+      <p style="font-size: 0.85rem; color: #7a7a7a;">
+        Website template borrowed from
+        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
   </div>
 </footer>
 
