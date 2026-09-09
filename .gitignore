@@ -7,10 +7,7 @@ Thumbs.db
 *.swp
 *~
 
-# --- Figure sources -------------------------------------------------
-# Source PDFs and LaTeX tables the figures in static/images/ were
-# rendered from (~21 MB). The site does not load them, so they stay
-# local. Delete these two lines if you want them in the repo.
+# --- Local figure sources (not required by the website) ---
 media/
 
 # --- Scratch ---
@@ -18,3 +15,8 @@ media/
 __pycache__/
 node_modules/
 .cache/
+# Temporary paper sources and generated upload archives stay local.
+tmp*
+
+# Downloaded Windows metadata; never deploy paper-source provenance.
+*:Zone.Identifier

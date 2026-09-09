@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,8 +7,9 @@
         content="Benchmarking World Models for Continual Learning on Compositional Tasks">
   <title>Benchmarking World Models for Continual Learning on Compositional Tasks</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="./css/fonts.css">
 
   <link rel="stylesheet" href="./css/bulma.min.css">
   <link rel="stylesheet" href="./css/index.css">
@@ -19,11 +20,12 @@
   <script>
     window.MathJax = {
       tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
-      svg: {fontCache: 'global'}
+      options: {enableMenu: false},
+      chtml: {fontURL: './static/vendor/mathjax/es5/output/chtml/fonts/woff-v2'}
     };
   </script>
   <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+          src="./static/vendor/mathjax/es5/tex-chtml.js"></script>
 
 <style>
   .caption {
@@ -37,7 +39,7 @@
   }
   .appendix-tag {
     display: inline-block;
-    font-family: 'Google Sans', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -91,26 +93,18 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-2 publication-title" style="color: black;">
-            Benchmarking World Models for Continual Learning<br>on Compositional Tasks
+            Benchmarking World Models<br>for Continual Learning on Compositional Tasks
           </h1>
 
-          <!-- TODO: replace with the author list / affiliations once de-anonymised -->
           <div class="is-size-5 publication-authors">
             <span class="author-block">Anonymous Authors</span>
           </div>
           <div class="is-size-6 publication-authors" style="color:#555;">
-            <span class="author-block">Under review</span>
+            <span class="author-block">ICRA submission · Supplementary website</span>
           </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <span class="link-block">
-                <a href="./paper.pdf"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper</span>
-                </a>
-              </span>
               <span class="link-block">
                 <a href="#appendix-a"
                    class="external-link button is-normal is-rounded is-dark">
@@ -120,6 +114,13 @@
               </span>
             </div>
           </div>
+          <nav class="section-links" aria-label="Page sections">
+            <a href="#results">Results</a>
+            <a href="#reuse-analysis">Reuse analysis</a>
+            <a href="#appendix-a">Metrics</a>
+            <a href="#appendix-b">Full results</a>
+            <a href="#appendix-c">Learning curves</a>
+          </nav>
 
         </div>
       </div>
@@ -131,15 +132,15 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img src="./static/images/teaser_figure.png"
-           alt="Overview of the compositional continual learning benchmark for world models."/>
+      <a class="figure-link" href="./static/images/teaser_figure.png" aria-label="Open figure at full resolution"><img class="portrait-figure" src="./static/images/teaser_figure.png"
+           alt="Overview of the compositional continual learning benchmark for world models."/></a>
       <p class="caption">
         <strong>Overview of our compositional continual learning benchmark for world models in robot
-        manipulation.</strong> <em>Left</em>: each task suite presents primitive manipulation tasks in
-        sequence and ends with a composition task built only from primitives already seen.
-        <em>Middle</em>: world models conditioned on both inputs learn the sequence under continual
-        learning settings. <em>Right</em>: we measure how much earlier tasks are forgotten and how fast
-        the final composition task is learnt through reusing.
+        manipulation.</strong> <em>Top</em>: each task suite presents a sequence of primitive
+        manipulation tasks, culminating in a composition task that recombines them across action,
+        perception, or full composition axes. <em>Bottom</em>: we evaluate the ability of world models
+        to adapt efficiently to novel composition tasks through knowledge reuse, without forgetting
+        previously learnt primitives along the sequence.
       </p>
     </div>
   </div>
@@ -234,8 +235,8 @@
               <tr class="group-row"><td colspan="3"><em>Perception composition</em></td></tr>
               <tr>
                 <td>BinPnP</td>
-                <td>pick cube from yellow bin to purple bin &rarr; yellow to red &rarr; blue to purple</td>
-                <td>blue bin to red bin</td>
+                <td>pick and place cube from red bin to blue bin &rarr; yellow to blue &rarr; red to purple</td>
+                <td>yellow bin to purple bin</td>
               </tr>
               <tr>
                 <td>PnPBlock</td>
@@ -284,15 +285,17 @@
               <p>
                 This partition is consequential for how we apply continual learning. When a new task
                 arrives, the novel observations and interactions must be absorbed by the task-agnostic
-                backbone continually. The task-specific heads are private to each task and are simply
-                re-initialised when the curriculum advances, because very different tasks can be defined
-                under the same environment and dynamics, each with its own reward and optimal behaviour.
+                backbone continually. The task-specific heads are private to each task. Fresh heads are initialised when the
+                curriculum advances; after training, each task's heads are stored and frozen. Earlier
+                tasks are evaluated with their own stored heads and the current shared backbone. This
+                separates changes in the shared representation from changes in a task's reward and
+                optimal behaviour.
               </p>
             </div>
           </div>
           <div class="column is-two-fifths has-text-centered">
-            <img src="./static/images/model_separation.png"
-                 alt="World model separation for continual learning."/>
+            <a class="figure-link" href="./static/images/model_separation.png" aria-label="Open figure at full resolution"><img src="./static/images/model_separation.png"
+                 alt="World model separation for continual learning."/></a>
           </div>
         </div>
         <p class="caption">
@@ -314,8 +317,25 @@
             of previous tasks, so the router can reuse previously learnt dynamics while still introducing
             new capacity. To isolate what the modular design contributes from encoder drift, we also
             pretrain the PWM encoder with an autoencoder reconstruction objective on expert
-            demonstrations, freeze it, and give the exact same encoder checkpoint to monolithic TD-MPC2
-            for comparison.
+            demonstrations of all benchmark tasks, freeze it, and give the exact same encoder checkpoint to monolithic TD-MPC2
+            for comparison. This is a diagnostic with privileged access to the full task distribution,
+            rather than a strictly continual encoder-learning setup.
+          </p>
+          <p>
+            <strong>Shared interface.</strong> Every baseline receives three camera views
+            (<em>topview</em>, <em>frontview</em>, and <em>gripperPOV</em>) stacked into a nine-channel
+            image, alongside seven proprioceptive values for end-effector position, velocity, and
+            gripper state. Four continuous actions in $[-1,1]$ control relative Cartesian end-effector
+            position and the gripper. Native shaped rewards are rescaled to $[-1,0]$ per timestep.
+            Encoders and proprioception branches are adapted to this interface while preserving each
+            baseline's native planning or imagination procedure and actor–critic training.
+          </p>
+          <p>
+            <strong>Continual learning settings.</strong> ER retains $5\%$ of each previous task's raw
+            transitions and uniformly samples them for backbone updates. EWC estimates the diagonal
+            Fisher information after each task and penalises changes to important parameters. PackNet
+            retains and freezes $25\%$ of the remaining free backbone parameters after each task.
+            FT updates the shared backbone without an additional forgetting-prevention mechanism.
           </p>
         </div>
       </div>
@@ -328,14 +348,23 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Results</h2>
+        <h2 class="title is-3" id="results">Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            <strong>Backward transfer (BWT↓)</strong> measures forgetting of earlier tasks after their
+            training ends. <strong>Forward transfer (FWT↑)</strong> measures learning on the final
+            composition task relative to learning it from scratch. Returns use a failure floor of 0
+            and a scripted oracle reference of 100; they are not capped above 100.
+            <a href="#appendix-a">Appendix A</a> gives the complete definitions.
+          </p>
+        </div>
+        <h3 class="title is-4">Baseline Performance and Comparison</h3>
         <div class="figure-block has-text-centered">
-          <img src="./static/images/results_bars.png"
-               alt="Continual learning performance on all six task suites."/>
+          <a class="figure-link" href="./static/images/results_bars.png" aria-label="Open figure at full resolution"><img src="./static/images/results_bars.png"
+               alt="Continual learning performance on all six task suites."/></a>
         </div>
         <p class="caption">
-          <strong>Continual learning performance on all six task suites.</strong> Task suites are shaded
-          by composition type. BWT is lower-is-better and FWT higher-is-better, black outlines mark the
+          <strong>Continual learning performance on all six task suites.</strong> Suites are listed in action, perception, and full-composition order. BWT is lower-is-better and FWT higher-is-better, black outlines mark the
           best method within a backbone. <em>Left</em>: the monolithic backbones DreamerV3 (blue) and
           TD-MPC2 (orange) under four continual learning methods. <em>Right</em>: modular PWM (teal)
           against monolithic TD-MPC2 (orange), with a scratch or a pretrained frozen encoder. Bars show
@@ -344,9 +373,10 @@
 
         <div class="content has-text-justified" style="margin-top: 1.5rem;">
           <p>
-            <strong>DreamerV3 outperforms TD-MPC2.</strong> Under naive fine-tuning and all three
-            conventional continual learning methods, DreamerV3 consistently outperforms TD-MPC2 on both
-            BWT and FWT. We attribute this to DreamerV3's generative reconstruction objective, which
+            <strong>DreamerV3 outperforms TD-MPC2 on average.</strong> Averaged over all six suites,
+            DreamerV3 achieves lower BWT and higher FWT than TD-MPC2 under each of the four continual
+            learning methods. Individual suite–method comparisons have exceptions, as shown in
+            <a href="#appendix-b">Appendix B</a>. We attribute this to DreamerV3's generative reconstruction objective, which
             encourages its latent to encode the scene more broadly than the current task alone requires.
             TD-MPC2 is decoder-free by design and shapes its latent only through latent consistency,
             reward prediction and temporal-difference learning, none of which requires the representation
@@ -410,8 +440,8 @@
             them nor fall back on free capacity to reuse them from the outside, making it the weakest
             method here. <em>PackNet</em> comes closest because freezing is paired with a pathway for
             reusing: it drives forgetting near zero while retaining competitive forward transfer, but
-            model capacity shrinks along the sequence and pruning allocates a fixed fraction per task,
-            making it the only method that bounds the curriculum length in advance.
+            the remaining free capacity shrinks along the sequence as pruning allocates a fraction
+            to each task, constraining adaptation over longer curricula.
           </p>
           <p>
             <strong>Explicit modularity pushes the frontier further.</strong> PWM preserves reusable
@@ -419,10 +449,148 @@
             dynamics model. Under our frozen encoder diagnostic, PWM reaches BWT 3.85 and FWT 36.18
             against TD-MPC2's 34.97 and 38.11, nearly eliminating forgetting while matching how fast
             TD-MPC2 learns the composition task under fine-tuning. Unlike PackNet, this combining capacity
-            is added with each task rather than carved from a shrinking pool, making it more scalable.
+            is added with each task rather than carved from a shrinking pool, at the cost of a growing model.
             However, without the privileged frozen encoder, PWM loses both the ability to retain or reuse.
             Furthermore, what PWM buys is the retention axis while leaving reuse where the monolithic
             model already had it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ REUSE ANALYSIS ============================ -->
+<section class="section" id="reuse-analysis" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Probing Reuse in the Modular World Model</h2>
+        <div class="content has-text-justified">
+          <p>
+            The baseline comparison above showed that, under a frozen encoder, PWM largely
+            eliminates forgetting while retaining competitive forward transfer. However, it remains
+            less clear whether adaptation is based on reusing previous experts or on learning the
+            newly introduced ones. Our benchmark's explicit compositional structure allows us to
+            examine this distinction directly. We therefore probe PWM with the pretrained frozen
+            encoder by first inspecting whether routing reflects the known task composition, then
+            ablating expert access and routing to test how prior experts, new experts, and learnt
+            weighting contribute to composition-task performance.
+          </p>
+        </div>
+        <div class="figure-block has-text-centered" id="router-figure">
+          <a class="figure-link" href="./static/images/router_visualisation.png" aria-label="Open figure at full resolution"><img src="./static/images/router_visualisation.png"
+               alt="Task composition structure, changes in task-level routing, and individual expert weights across all six curricula."/></a>
+          <p class="caption">
+            <strong>Task composition structure and expert routing dynamics.</strong>
+            <em>Left</em>: entry $(i,j)$ indicates whether task $i$ contains a reusable component from
+            task $j$ along the corresponding composition axis. <em>Middle</em>: change in the average
+            routing weight of the three experts introduced by each task, relative to their weight
+            immediately after learning that task. A ratio of $1\times$ means no change; smaller and
+            larger ratios indicate down-weighting and increased weighting. <em>Right</em>: individual
+            expert weights divided by uniform allocation $1/K_{\mathrm{active}}$, so 1 denotes uniform
+            weighting. Rows show curriculum stages and columns show experts. The boxed final row is
+            after composition learning; $C$ denotes the composition task.
+          </p>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <strong>Router weights recover task-level reuse structure in several curricula.</strong>
+            <a href="#router-figure">The routing figure</a> compares the compositional structure
+            between tasks with how PWM reallocates weight to previously introduced experts. Across
+            several curricula, the learnt routing broadly follows the expected reuse pattern,
+            particularly for the <em>Reach</em>, <em>Grasp</em>, and <em>BinPnP</em> suites. Experts
+            associated with recurring components tend to retain more of their original weight, while
+            unrelated experts are more strongly down-weighted. <em>BinPnP</em> provides a clear
+            example during primitive-task learning: on the third task, the router increases the
+            weight assigned to experts from an overlapping prior task to $1.20\times$ while reducing
+            that of a non-overlapping one to $0.57\times$. Similar trends in <em>Grasp</em> and
+            <em>Reach</em> also suggest that PWM selectively allocates weight to prior experts when
+            their underlying components recur.
+          </p>
+          <p>
+            <strong>Task-level routing may limit temporal composition.</strong> However, this
+            correspondence between routing and task structure is not consistent across all task
+            suites. In particular, we do not observe the expected reuse pattern in <em>PnPBlock</em>
+            and the two full-composition suites after composition learning. We attribute this to
+            PWM's router being task-conditioned rather than state-conditioned. A fixed expert
+            allocation is learnt for each task, preventing the router from varying its allocation
+            on-the-fly. This may limit its suitability for temporally composed tasks, where
+            different primitives are required at different stages. Notably, all three suites without
+            a clear routing correspondence involve such temporal composition. More generally,
+            composition tasks may also introduce interactions that are not captured by either
+            primitive in isolation, such as transitions between them. These observations suggest
+            that effective reuse may require both routing that adapts across stages of a task and
+            additional capacity to capture interactions between primitives.
+          </p>
+          <p>
+            <strong>Composition learning preserves expert-level preferences.</strong> The right
+            panel of <a href="#router-figure">the routing figure</a> looks closer into the weight
+            distribution for individual experts, and shows that expert-level preferences persist
+            across all learning curricula. The highest-weighted expert within each primitive task
+            remains top-ranked after composition learning in $13$ out of $14$ cases. Moreover,
+            weight remains distributed across prior and new experts rather than concentrating
+            exclusively on the newly introduced capacity. This motivates us to design the following
+            ablation to test whether their routing weights correspond to a functional contribution.
+          </p>
+        </div>
+        <div class="figure-block has-text-centered" id="ablation-figure">
+          <a class="figure-link" href="./static/images/expert_ablation.png" aria-label="Open figure at full resolution"><img class="portrait-figure" src="./static/images/expert_ablation.png"
+               alt="Closed-loop return and open-loop latent prediction fidelity for the full mixture, prior experts only, new experts only, and uniform routing across six composition tasks."/></a>
+          <p class="caption">
+            <strong>Expert ablation on the composition task.</strong> Closed-loop return and open-loop
+            latent prediction fidelity for PWM with the pretrained frozen encoder. The full learnt
+            mixture is compared with prior experts only (<em>old only</em>), newly introduced experts
+            only (<em>new only</em>), and uniform weighting of all experts (<em>uniform</em>).
+            Each measure is expressed as a percentage of its unablated baseline, shown by the dashed
+            line at 100%.
+          </p>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <strong>Expert ablation confirms functional reuse of prior experts.</strong> To test
+            whether the routing patterns correspond to functional reuse, <a
+            href="#ablation-figure">the expert ablation figure</a> compares closed-loop return and
+            open-loop latent prediction fidelity under three ablations: retaining only prior
+            experts, retaining only newly introduced experts, and uniformly weighting all experts,
+            each relative to the full learnt mixture. Prior experts alone retain near-baseline
+            return and prediction fidelity on <em>BinPnP</em>, providing the clearest functional
+            support for the routing analysis above. They also preserve substantial return on
+            <em>Reach</em> and <em>DrawerPnP</em>, although prediction fidelity falls more sharply.
+            The <em>DrawerPnP</em> result shows that useful prior dynamics remain available even
+            where routing does not clearly reflect the expected compositional structure. Newly
+            introduced experts alone perform poorly across the suites, while uniform routing also
+            falls well below the full mixture, showing that access to the experts is insufficient
+            without learning their contributions. Together, these results support functional reuse
+            of previously acquired dynamics, with the full model benefiting from combining prior and
+            new experts through learnt routing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="limitations" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Limitations and Open Directions</h2>
+        <div class="content has-text-justified">
+          <p>
+            The evaluation covers six simulated curricula and a single model size per baseline,
+            without systematic control of parameter or compute budgets. PWM adds expert capacity
+            with each task, so the contributions of modularity and scale are not fully separated.
+            Broader comparisons across model sizes, offline-pretrained world models, and longer or
+            real-world task sequences are needed to establish how far these findings generalise.
+          </p>
+          <p>
+            Modularity improves retention while forward transfer remains close to its monolithic
+            counterpart. More effective combinations of prior experts, especially across stages of
+            temporal composition, remain an open direction. The frozen-encoder result also depends
+            on pretraining on the full task distribution, which is unavailable in a strictly continual
+            setting. Learning stable, general representations continually remains the other half of
+            the problem.
           </p>
         </div>
       </div>
@@ -439,8 +607,8 @@
         <h2 class="title is-3">Metric Definitions</h2>
 
         <div class="figure-block has-text-centered">
-          <img src="./static/images/metrics_illustration.png"
-               alt="The two metrics on a representative run."/>
+          <a class="figure-link" href="./static/images/metrics_illustration.png" aria-label="Open figure at full resolution"><img src="./static/images/metrics_illustration.png"
+               alt="The two metrics on a representative run."/></a>
         </div>
         <p class="caption">
           <strong>The two metrics on a representative run.</strong> Solid traces show each task while it
@@ -498,7 +666,7 @@
             task to examine the reusing ability of the models. Let $R_N^{\mathrm{seq}}(t)$ be its learning
             curve during its position in the curriculum, rebased to $t = 0$, and let
             $R_N^{\mathrm{scr}}(t)$ be the curve obtained when learning the same task from scratch with no
-            preceding primitives. With a shared learning step $T$, FWT is the shaded region between them
+            preceding primitives. With a shared training budget of $T$ steps, FWT is the shaded region between them
             divided by the learning length:
           </p>
           <p style="text-align: center;">
@@ -756,14 +924,14 @@
             final-task evaluation from scratch. Shading with different colours corresponds to the FWT and
             BWT regions defined in Appendix A. Vertical dotted lines mark task switches. The training
             budget per task is set by the steps a from-scratch run needs to converge, and therefore differs
-            across backbones. Both metrics are normalised over the interval they integrate, so scores
-            remain comparable across these budgets.
+            across backbones. Both metrics are normalised over the interval they integrate; these
+            comparisons do not impose equal parameter or compute budgets.
           </p>
         </div>
 
         <div class="figure-block has-text-centered">
-          <img src="./static/images/full_curves_dreamerv3.png"
-               alt="Complete DreamerV3 learning curves."/>
+          <a class="figure-link" href="./static/images/full_curves_dreamerv3.png" aria-label="Open figure at full resolution"><img src="./static/images/full_curves_dreamerv3.png"
+               alt="Complete DreamerV3 learning curves."/></a>
           <p class="caption">
             Complete <strong>DreamerV3</strong> learning curves across six task suites and four
             continual-learning methods.
@@ -771,8 +939,8 @@
         </div>
 
         <div class="figure-block has-text-centered">
-          <img src="./static/images/full_curves_tdmpc2.png"
-               alt="Complete TD-MPC2 learning curves."/>
+          <a class="figure-link" href="./static/images/full_curves_tdmpc2.png" aria-label="Open figure at full resolution"><img src="./static/images/full_curves_tdmpc2.png"
+               alt="Complete TD-MPC2 learning curves."/></a>
           <p class="caption">
             Complete <strong>TD-MPC2</strong> learning curves across six task suites and four
             continual-learning methods.
@@ -780,13 +948,14 @@
         </div>
 
         <div class="figure-block has-text-centered">
-          <img src="./static/images/full_curves_pwm.png"
-               alt="The frozen-encoder comparison across all six task suites."/>
+          <a class="figure-link" href="./static/images/full_curves_pwm.png" aria-label="Open figure at full resolution"><img src="./static/images/full_curves_pwm.png"
+               alt="The frozen-encoder comparison across all six task suites."/></a>
           <p class="caption">
             The <strong>frozen-encoder comparison</strong> across all six task suites: PWM with a scratch
             encoder, PWM with the pretrained frozen encoder, and monolithic TD-MPC2 with the same
-            pretrained frozen encoder. The middle and right panels differ only in whether the dynamics
-            model is explicitly modular, and are the pair our frozen-encoder diagnostic compares. TD-MPC2
+            pretrained frozen encoder. The middle and right panels share the same pretrained frozen encoder and compare modular PWM
+            with monolithic TD-MPC2. PWM also grows its expert capacity across tasks, so this is not a
+            parameter-matched comparison. TD-MPC2
             with a scratch encoder can be found in the first column of the TD-MPC2 figure above.
           </p>
         </div>
@@ -800,7 +969,7 @@
     <div class="content has-text-centered">
       <p>
         Benchmarking World Models for Continual Learning on Compositional Tasks &mdash;
-        this page hosts the appendix material accompanying the paper.
+        anonymous supplementary material accompanying the ICRA submission.
       </p>
       <p style="font-size: 0.85rem; color: #7a7a7a;">
         Website template borrowed from
