@@ -31,6 +31,17 @@ body {
   display: inline-block;
 }
 
+.publication-affiliation {
+  margin-top: 0.45rem;
+  color: #555;
+  line-height: 1.55;
+}
+
+.corresponding-author {
+  margin-top: 0.35rem;
+  color: #666;
+}
+
 .publication-venue {
   color: #555;
   width: fit-content;
