@@ -2,15 +2,6 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
-.teaser {
-  font-family: 'Noto Sans', sans-serif;
-}
-
-.teaser .hero-body {
-  padding-top: 0;
-  padding-bottom: 3rem;
-}
-
 .publication-title {
   font-family: 'Noto Sans', sans-serif;
 }
@@ -211,5 +202,405 @@ mjx-container[display="true"] {
   .section-dropdown-panel a {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
+  }
+}
+
+/* ---------------- Collapsible sections ---------------- */
+
+:root {
+  /* Oxford blue palette for the main sections */
+  --fold-accent: #002147;          /* Oxford blue */
+  --fold-head-bg: #edf1f7;         /* light Oxford blue tint */
+  --fold-head-bg-hover: #e1e8f1;
+  --fold-border: #d6dee9;
+  --fold-title: #002147;
+  --fold-summary: #4a5a70;
+  /* Neutral greys for the appendix */
+  --fold-accent-muted: #7d8794;
+  --fold-appendix-bg: #f3f5f8;
+  --fold-appendix-bg-hover: #e9edf2;
+  --fold-appendix-border: #e1e5ea;
+  --fold-appendix-title: #1b2330;
+}
+
+.fold-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--fold-summary);
+}
+
+.fold-toolbar-hint {
+  font-style: italic;
+}
+
+.fold-all {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--fold-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--fold-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.fold-all:hover {
+  background: var(--fold-head-bg);
+  border-color: #c5ccd5;
+}
+
+.fold-all:focus-visible,
+.fold-toggle:focus-visible {
+  outline: 2px solid #3273dc;
+  outline-offset: 2px;
+}
+
+html:not(.js) .fold-toolbar {
+  display: none;
+}
+
+.section.fold-section {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.fold {
+  border: 1px solid var(--fold-border);
+  border-left: 5px solid var(--fold-accent);
+  border-radius: 0;
+  background: #fff;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.fold.is-open {
+  box-shadow: 0 6px 20px rgba(0, 33, 71, 0.08);
+}
+
+.is-appendix .fold {
+  border-color: var(--fold-appendix-border);
+  border-left-color: var(--fold-accent-muted);
+}
+
+.is-appendix .fold.is-open {
+  box-shadow: 0 6px 20px rgba(20, 33, 61, 0.06);
+}
+
+h2.fold-heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.fold-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.1rem 1.35rem;
+  border: 0;
+  background: var(--fold-head-bg);
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.fold-toggle:hover {
+  background: var(--fold-head-bg-hover);
+}
+
+.is-appendix .fold-toggle {
+  background: var(--fold-appendix-bg);
+}
+
+.is-appendix .fold-toggle:hover {
+  background: var(--fold-appendix-bg-hover);
+}
+
+.fold.is-open .fold-toggle {
+  border-bottom: 1px solid var(--fold-border);
+}
+
+.is-appendix .fold.is-open .fold-toggle {
+  border-bottom-color: var(--fold-appendix-border);
+}
+
+.is-appendix .fold-title {
+  color: var(--fold-appendix-title);
+}
+
+.fold-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fold-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.6rem;
+  color: var(--fold-title);
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.fold-title .appendix-tag {
+  margin-bottom: 0;
+  background-color: var(--fold-accent-muted);
+}
+
+.fold-summary {
+  color: var(--fold-summary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.fold-chevron {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--fold-border);
+}
+
+.is-appendix .fold-chevron {
+  border-color: var(--fold-appendix-border);
+}
+
+.fold-chevron::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--fold-accent);
+  border-bottom: 2px solid var(--fold-accent);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.25s ease;
+}
+
+.fold.is-open .fold-chevron::before {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.fold-content {
+  padding: 1.5rem 1.35rem 1.25rem;
+}
+
+/* Collapse only when JS is available, so the page stays readable without it. */
+.js .fold-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.js .fold.is-open .fold-body {
+  grid-template-rows: 1fr;
+}
+
+.js .fold-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fold-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem 0.75rem;
+  color: var(--fold-accent-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fold-divider::before,
+.fold-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--fold-appendix-border);
+}
+
+.footer {
+  margin-top: 3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .fold-body,
+  .fold-chevron::before {
+    transition: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .fold-toolbar-hint {
+    display: none;
+  }
+
+  .fold-toolbar {
+    justify-content: flex-end;
+  }
+
+  .fold-toggle {
+    padding: 0.9rem 1rem;
+  }
+
+  .fold-title {
+    font-size: 1.2rem;
+  }
+
+  .fold-summary {
+    font-size: 0.875rem;
+  }
+
+  .fold-content {
+    padding: 1.25rem 1rem 1rem;
+  }
+}
+
+@media print {
+  .fold-toolbar,
+  .fold-chevron {
+    display: none;
+  }
+
+  .js .fold-body {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* ---------------- Abstract + teaser row ---------------- */
+
+.section.intro-section {
+  padding-top: 1rem;
+  padding-bottom: 2.5rem;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.abstract-card {
+  position: relative;
+  padding: 1.75rem 2rem 1.5rem;
+  background: linear-gradient(180deg, #f3f6fb 0%, #ffffff 100%);
+  border: 1px solid var(--fold-border);
+  border-top: 4px solid var(--fold-accent);
+  box-shadow: 0 10px 30px rgba(0, 33, 71, 0.08);
+}
+
+h2.abstract-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  color: var(--fold-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h2.abstract-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--fold-border);
+}
+
+.abstract-card .content p {
+  color: #283447;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.abstract-card .content em {
+  color: var(--fold-accent);
+  font-weight: 600;
+}
+
+.teaser-figure {
+  margin: 0;
+}
+
+.teaser-figure .portrait-figure {
+  width: 100%;
+  max-width: 560px;
+  max-height: none;
+}
+
+.teaser-figure .caption {
+  margin-top: 1rem;
+}
+
+/* Side by side once there is room for both; stacked otherwise. */
+@media screen and (min-width: 1216px) {
+  .intro-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    max-width: none;
+    align-items: stretch;
+  }
+
+  /* The abstract sets the row height; the teaser image scales to fill
+     whatever is left above its caption, so both columns end level. */
+  .teaser-figure {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .teaser-figure .figure-link {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 320px;
+  }
+
+  .teaser-figure .portrait-figure {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    object-position: center top;
+  }
+
+  .teaser-figure .caption {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .abstract-card {
+    padding: 1.25rem 1.1rem 1rem;
+  }
+
+  .abstract-card .content p {
+    font-size: 0.97rem;
+    line-height: 1.65;
+  }
+
+  /* Justified text leaves large gaps in a narrow column. */
+  .abstract-card .content.has-text-justified {
+    text-align: left !important;
   }
 }
