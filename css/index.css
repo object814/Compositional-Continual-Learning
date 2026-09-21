@@ -44,6 +44,40 @@ body {
   margin-bottom: 5px;
 }
 
+.publication-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.button.paper-link {
+  padding-left: 1.2em;
+  padding-right: 1.3em;
+  border: 0;
+  background-color: var(--fold-accent);
+  color: #fff;
+  font-weight: 600;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.button.paper-link:hover {
+  background-color: #0d3a6e;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.button.paper-link:focus-visible {
+  outline: 2px solid #3273dc;
+  outline-offset: 2px;
+  color: #fff;
+}
+
+.button.paper-link .icon {
+  font-size: 1.05em;
+}
+
 .section-links {
   display: flex;
   flex-wrap: wrap;
