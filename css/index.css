@@ -542,7 +542,7 @@ h2.fold-heading {
   box-shadow: 0 10px 30px rgba(0, 33, 71, 0.08);
 }
 
-h2.abstract-label {
+h2.card-label {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -554,7 +554,7 @@ h2.abstract-label {
   text-transform: uppercase;
 }
 
-h2.abstract-label::after {
+h2.card-label::after {
   content: "";
   flex: 1;
   height: 1px;
@@ -584,6 +584,23 @@ h2.abstract-label::after {
 
 .teaser-figure .caption {
   margin-top: 1rem;
+}
+
+/* ---------------- Video ---------------- */
+
+.section.video-section {
+  padding-top: 0;
+  padding-bottom: 2.5rem;
+}
+
+.video-frame {
+  aspect-ratio: 16 / 9;
+}
+
+.video-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* Side by side once there is room for both; stacked otherwise. */
